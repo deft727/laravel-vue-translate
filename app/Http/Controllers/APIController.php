@@ -228,7 +228,6 @@ class APIController extends Controller
                             'translatedEntityCnt' => $translatedEntityCnt,
                             'fileName' => $newFileName,
                             'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/" . $downloadFileName
-                            // 'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/" . 'uploads/' . $uploadFile->id . '/html/' . $uploadFile->file_name
                         ], 200);
                     }else{
                         return response()->json([
@@ -242,10 +241,6 @@ class APIController extends Controller
                         'translatedEntityCnt' => $translatedEntityCnt
                     ], 200);
                 }else if($res['status'] == 'failed'){
-                    // return response()->json([
-                    //     'isTranslationFinished' => false,
-                    //     'translatedEntityCnt' => $translatedEntityCnt
-                    // ], 200);
                     return response()->json([
                         'message' => 'API server File converting failed1.'
                     ], 500);
@@ -256,102 +251,6 @@ class APIController extends Controller
                     'message' => 'API server File converting failed2.'
                 ], 500);
             }
-            /*
-            $fileName = $uploadFile->file_name;
-            $arr = explode('.', $fileName);
-            $fName = $arr[0];
-            $outputHtmlFileName = public_path() . '/uploads/' . $uploadFile->id . '/html/' . $fName . '.html';
-
-            $content = file_get_contents($outputHtmlFileName);
-            $dom = new \DOMDocument();
-            libxml_use_internal_errors(true);
-            $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-            libxml_clear_errors();
-            $xpath = new \DOMXPath($dom);
-            
-            $cnt = 0;
-
-            $entities = $xpath->query('//text()');
-            $array = array();
-            foreach($entities as $entity){
-                $array[] = $entity;
-            }
-            $slicedArray = array_slice($array, $translatedEntityCnt);
-
-            $tr = new GoogleTranslateClient([
-                'api_key' => env('GOOGLE_TRANSLATE_API_KEY'),
-                'default_target_translation' => 'en'
-            ]);
-
-            foreach ($slicedArray as $text) {
-                if ($cnt == 200) break;
-
-                $cnt ++;
-                $translatedEntityCnt ++;
-                
-                if ($text->parentNode->tagName === 'script' || $text->parentNode->tagName === 'noscript' || $text->parentNode->tagName === 'style') {
-                    continue;
-                }
-                if (trim($text->nodeValue)) {
-                    try {
-                        $outputs = $tr->translate($text->nodeValue, $uploadFile->target_lang);
-                        $text->nodeValue = $outputs['text'];
-                    } catch (\Throwable $th) {
-                        $th = $th;
-                    }
-                }
-            }
-
-            $html = $dom->saveHTML();
-            file_put_contents($outputHtmlFileName, $html);
-
-            if ($translatedEntityCnt == count($entities)) {
-                $outputPdfFileName = public_path() . '/uploads/' . $uploadFile->id . '/pdf/' . $fName . '.pdf';
-                $pdfFileName = 'uploads/' . $uploadFile->id . '/pdf/' . $fName . '.pdf';
-                $outputDirname = dirname($outputPdfFileName);
-                if (!is_dir($outputDirname)) {
-                    mkdir($outputDirname, 0755, true);
-                }
-
-                // $new_elm = $dom->createElement('style', 'body {font-family: DejaVu Sans;}');
-                // $new_elm->setAttribute('type', 'text/css');
-
-                // // Inject the new <style> Tag in the document head
-                // $head = $dom->getElementsByTagName('head')->item(0);
-                // $head->appendChild($new_elm);
-
-                // $html = $dom->saveHTML();
-                // file_put_contents($outputHtmlFileName, $html);
-
-                $config = [
-                    'mode' => '+aCJK', 
-                    // "allowCJKoverflow" => true, 
-                    "autoScriptToLang" => true,
-                    // "allow_charset_conversion" => false,
-                    "autoLangToFont" => true,
-                ];
-
-                // $mpdf = new PDF($config);
-                // $mpdf->loadHTML($html);
-
-                // $mpdf->SetAutoFont();
-                // $mpdf->autoScriptToLang = true;
-                // $mpdf->autoLangToFont   = true;
-
-                PDF::loadHTML($html, $config)->save($outputPdfFileName);
-                return response()->json([
-                    'isTranslationFinished' => true,
-                    'translatedEntityCnt' => $translatedEntityCnt,
-                    'fileName' => $fName . '.pdf',
-                    'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/" . $pdfFileName
-                ], 200);
-            } else {
-                return response()->json([
-                    'isTranslationFinished' => false,
-                    'translatedEntityCnt' => $translatedEntityCnt
-                ], 200);
-            }
-            */
         } catch(\Throwable $th) {
             return response()->json([
                 'message' => $th->getMessage()
