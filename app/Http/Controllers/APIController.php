@@ -120,7 +120,7 @@ class APIController extends Controller
             return $th->getMessage();
         }
     }
-    public function callWastonApiDownloadDocument($document_id, $outputFileName, $acceptString) {
+    public function callWastonApiDownloadDocument($document_id, $outputFileName) {
         //Open file handler.
         $fp = fopen($outputFileName, 'w+');
         try {
@@ -209,19 +209,24 @@ class APIController extends Controller
             $res = $this->callWastonApiGetDocument($uploadFile->document_id);
             if ($res['success'] == true) {
                 if($res['status'] == 'available'){
-                    $outputFileName = public_path() . '/uploads/' . $uploadFile->id . '/output/' . $uploadFile->file_name;
-                    $downloadFileName = 'uploads/' . $uploadFile->id . '/output/' . $uploadFile->file_name;
+                    $fileName = $uploadFile->file_name;
+                    $arr = explode('.', $fileName);
+                    $fName = $arr[0];
+                    $extension = end($arr);
+                    $newFileName = $fName . "_" .strtoupper($uploadFile->target_lang) . "." . $extension;
+                    $outputFileName = public_path() . '/uploads/' . $uploadFile->id . '/output/' . $newFileName;
+                    $downloadFileName = 'uploads/' . $uploadFile->id . '/output/' . $newFileName;
                     $outputDirname = dirname($outputFileName);
                     if (!is_dir($outputDirname)) {
                         mkdir($outputDirname, 0755, true);
                     }
                     
-                    $res_download = $this->callWastonApiDownloadDocument($uploadFile->document_id, $outputFileName, $uploadFile->file_type);
+                    $res_download = $this->callWastonApiDownloadDocument($uploadFile->document_id, $outputFileName);
                     if($res_download['success']){
                         return response()->json([
                             'isTranslationFinished' => true,
                             'translatedEntityCnt' => $translatedEntityCnt,
-                            'fileName' => $res['filename'],
+                            'fileName' => $newFileName,
                             'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/" . $downloadFileName
                             // 'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/" . 'uploads/' . $uploadFile->id . '/html/' . $uploadFile->file_name
                         ], 200);
