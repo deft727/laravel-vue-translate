@@ -11,7 +11,18 @@
                                 <input type="file" name="file" :disabled="isConverting" @change="filesChange($event.target.files)" 
                                     accept=".pdf, .rtf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt, .text, .gif, .png, .jpg, .jpeg, .jpg, .jfif, .tif, .tiff" 
                                     class="input-file">
-                                <div class="dropbox-inner">
+                                <div v-if="tempFileName" class="dropbox-inner">
+                                    <div class="img-rt">
+                                        <img src="../assets/img/file.png" alt="file image">
+                                    </div>
+                                    <div class="dropbox-content">
+                                        <div class="dropbox-cap1">Uploaded File</div>
+                                        <div class="dropbox-cap2">
+                                            {{tempFileName}}, or upload file again <span class="f-link">browse</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else class="dropbox-inner">
                                     <div class="img-rt">
                                         <img src="../assets/img/upload.png" alt="upload image">
                                     </div>
@@ -49,6 +60,7 @@
         data: () => {
             return {
                 languages: languages,
+                tempFileName: '',
                 isConverting: false,
                 targetLanguage: '',
                 formData: null,
@@ -156,6 +168,8 @@
                 this.formData.append('fileType', file.type);
                 this.formData.append('fileName', file.name);
                 this.formData.append('fileSize', file.size);
+                this.tempFileName = file.name
+                console.log("filename", this.tempFileName)
             },
         }
     }
