@@ -1,5 +1,8 @@
 <template>
     <div class="row justify-content-center ">
+        <div class="col-md-12 logo-area text-center">
+            <img class="logo" src="../assets/img/creativecats.svg" width="310"  alt="logo image">
+        </div>
         <div class="col-md-8 mt-5">
             <div class="card">
                 <div class="card-header text-center">Converter && Translator</div>

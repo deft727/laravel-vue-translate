@@ -1,39 +1,34 @@
 $blue_color: #0992f1;
-.appt-contact{
-  display: flex;flex-direction: column;padding: 10px 0;
-  .lbl-information{font-size: 18px;color: #222;padding-bottom: 10px;}
-  .custom-select-vehicle, .custom-input{
-    height: 58px;border-radius: 3px;border: 1px solid rgb(214,214,214);
-    padding: 0 15px;font-size: 16px;color: #222;
-    &.has-error{border-color: #a94442;}
-  }
-  .custom-textarea{
-    border-radius: 3px;border: 1px solid rgb(214,214,214);
-    padding: 15px;font-size: 16px;color: #222;height: 150px;
-  }
+.logo-area{
+  margin-top: 50px;
 }
-.vehicle-info-area{padding: 10px 0;}
-.vehicle-sel-area{
-  display: flex;flex-direction: row;margin: 0px -5px;
-  .sel-area{flex: 1; padding: 0 5px;}
-  @media screen and (max-width: 767px){
-    flex-direction: column;
-    .d-flex{margin-bottom: 10px;}
-  }
+
+.card-header{
+  background: #6a6a6a;
+  color: #fff;
+  text-transform: uppercase;
 }
-.person-info-area{
-  padding: 10px 0;
-  .person-info{
-    display: flex;flex-direction: row;margin: 0px -5px;
-    .form-ctrl{margin: 5px;}
-  }
-  @media screen and (max-width: 767px){
-    .person-info{
-      flex-direction: column;
-      .custom-select-vehicle{margin-bottom: 10px;}
-    }
-  }
+
+.btn-primary.disabled, .btn-primary:disabled {
+  color: #fff;
+  background-color: #b5b5b5;
+  border-color: #b5b5b5;
 }
+
+.btn-primary {
+  color: #fff;
+  background-color: #6a6a6a;
+  border-color: #6a6a6a;
+}
+
+.btn-primary:hover{
+  background: #000;
+}
+
+.dropbox-content{
+  color: #6a6a6a;
+}
+
 .dropbox {
   outline: 1px dashed rgb(194,194,194);border-radius: 3px;background: rgba(243,243,243, 0.5);
   height: 150px;position: relative;cursor: pointer;
@@ -63,8 +58,9 @@ $blue_color: #0992f1;
 .dropbox-inner{
   display: flex;flex-direction: row;justify-content: center;align-items: center;height: 100%;
   .img-rt{margin-right: 15px;}
+  
   .dropbox-cap1{font-size: 20px;line-height: 1;font-weight: bold;}
-  .f-link{color: $blue_color; text-decoration: underline;}
+  .f-link{color: #000; text-decoration: underline;}
   @media screen and (max-width: 400px){
     flex-direction: column;
   }

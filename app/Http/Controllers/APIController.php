@@ -87,7 +87,8 @@ class APIController extends Controller
                 return ['success'=>false, 'message'=>$message];
             }
         } catch (\Throwable $th) {
-            return $th->getMessage();
+            // return $th->getMessage();
+            return ['success'=>false, 'message'=>$th->getMessage()];
         }
     }
     public function callWastonApiGetDocument($document_id) {
@@ -180,7 +181,7 @@ class APIController extends Controller
             $b = $this->callWastonApi($inputFileName, $uploadFile->target_lang);
             // $b = $this->callWastonApi($workflowId, $inputFileName, $outputFileName);
             // print_r($b);exit;
-            if ($b['success'] == true) {
+            if ($b['success']) {
                 // save to database
                 $uploadFile->document_id = $b['document_id'];
                 $uploadFile->save();
