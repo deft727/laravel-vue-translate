@@ -29,6 +29,10 @@ $blue_color: #0992f1;
   color: #6a6a6a;
 }
 
+.text-primary{
+  color: #6a6a6a !important;
+}
+
 .dropbox {
   outline: 1px dashed rgb(194,194,194);border-radius: 3px;background: rgba(243,243,243, 0.5);
   height: 150px;position: relative;cursor: pointer;
