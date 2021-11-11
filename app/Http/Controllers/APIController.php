@@ -77,12 +77,16 @@ class APIController extends Controller
                 $message = 'Curl error: ' . curl_error($ch)."<br>";
             }
             curl_close($ch);
-            // print_r($result);exit;
             $result = json_decode($result, true);
+            // print_r($result);exit;
             // print_r($result['document_id']);
             // exit;
             if($message == '') {
-                return ['success'=>true, 'document_id'=>$result['document_id']];
+                if(array_key_exists("error",$result)) {
+                    return ['success'=>false, 'message'=>$result['error']];    
+                }else {
+                    return ['success'=>true, 'document_id'=>$result['document_id']];
+                }
             }else{
                 return ['success'=>false, 'message'=>$message];
             }
