@@ -106,12 +106,13 @@
                     this.message = 'File translating...';
                     this.translationFailedCnt = 0;
                     this.interval = setInterval(() => {
+                        this.translatedEntityCnt++
                         this.translateHTML();
                     }, 3000);
                 })
                 .catch(err => {
                     this.isConverting = false;
-                    console.log(err);
+                    // console.log(err);
                     const response = err.response;
                     if (response.status === 500) {
                         this.message = response.data.message || response.message;
@@ -130,6 +131,7 @@
                 htmlTranslate(formData)
                 .then(res => {
                     this.translatedEntityCnt = res.data.translatedEntityCnt;
+                    console.log(res.data.message, this.translatedEntityCnt)
                     if (res.data.isTranslationFinished) {
                         this.isConverting = false;
                         this.message = 'File translated successfully.';
@@ -137,6 +139,12 @@
                         this.translationFailedCnt = 0;
                         clearInterval(this.interval);
                         this.downloadFile(res.data.url, res.data.fileName);
+                    } else if (res.data.message !== "") {
+                        this.isConverting = false;
+                        this.message = res.data.message;
+                        this.translatedEntityCnt = 0;
+                        this.translationFailedCnt = 0;
+                        clearInterval(this.interval);
                     }
                     this.isTranslating = false;
                 })
@@ -161,18 +169,23 @@
                 link.click();
                 document.body.removeChild(link);
             },
+            getFileExtension(filename) {
+                return filename.split('.').pop();
+            },
             filesChange(fileList) {
                 // handle file changes
                 this.formData = new FormData();
                 if (!fileList.length) return;
                 // append the files to FormData
                 const file = fileList[0];
+                console.log(file.type || this.getFileExtension(file.name));
                 this.formData.append('file', file);
-                this.formData.append('fileType', file.type);
+                this.formData.append('fileType', file.type || 'ext');
                 this.formData.append('fileName', file.name);
                 this.formData.append('fileSize', file.size);
                 this.tempFileName = file.name
                 console.log("filename", this.tempFileName)
+                // return;
             },
         }
     }
